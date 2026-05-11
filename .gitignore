@@ -1,0 +1,24 @@
+# Local runtime config and logs
+config/config.json
+logs/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Tooling and build output
+.coverage
+coverage/
+dist/
+build/
+.turbo/
+node_modules/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
