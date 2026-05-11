@@ -1,0 +1,23 @@
+{
+  "computer_name": "user_1",
+  "local_log_directory": "logs",
+  "public_ip_check_interval_seconds": 600,
+  "resource_check_interval_seconds": 60,
+  "cpu_critical_percent": 90,
+  "ram_critical_percent": 90,
+  "critical_count_before_action": 3,
+  "monitor_edge": false,
+  "server": {
+    "host": "replace_with_server_host_or_ip",
+    "port": 22,
+    "username": "replace_with_ssh_username",
+    "password_env_var": "IPMON_SERVER_PASSWORD",
+    "remote_root": "/path/to/monitoring/ip_logs",
+    "connect_timeout_seconds": 15,
+    "upload_retry_seconds": 120
+  },
+  "public_ip_sources": [
+    "https://api.ipify.org",
+    "https://ifconfig.me/ip"
+  ]
+}
