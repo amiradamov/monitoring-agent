@@ -116,7 +116,7 @@ Recommended future CI:
 - The installer stores the server password in the Windows user environment variable named by `server.password_env_var`, default `IPMON_SERVER_PASSWORD`.
 - Treat `config/config.json` as deployment-specific; avoid adding sensitive hostnames, usernames, or internal IPs unless required.
 - Be careful editing `docs/VPN_SETUP.md`, server addresses, SSH usernames, remote paths, and WireGuard details.
-- `monitor_agent.py` can close browser processes under configured resource pressure; review threshold and process-name changes carefully.
+- `monitor_agent.py` reports configured resource pressure but should not close browser processes.
 - SFTP upload paths are built from config and `computer_name`; preserve validation when changing config handling.
 - The server upload currently sends the active rotated log file and overwrites the remote file for that computer. If remote history is added later, add server-side retention or compression at the same time.
 

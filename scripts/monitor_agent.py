@@ -3,7 +3,6 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 import socket
-import subprocess
 import sys
 import time
 from dataclasses import dataclass
@@ -35,7 +34,6 @@ class AgentConfig:
     ram_critical_percent: int
     critical_count_before_action: int
     resource_top_process_count: int
-    monitor_edge: bool
     server_host: str
     server_port: int
     server_username: str
@@ -102,7 +100,6 @@ def load_config() -> AgentConfig:
         ram_critical_percent=int(raw.get("ram_critical_percent", 90)),
         critical_count_before_action=int(raw.get("critical_count_before_action", 3)),
         resource_top_process_count=resource_top_process_count,
-        monitor_edge=bool(raw.get("monitor_edge", False)),
         server_host=str(server.get("host", "")).strip(),
         server_port=int(server.get("port", 22)),
         server_username=str(server.get("username", "")).strip(),
@@ -292,36 +289,6 @@ def collect_top_processes(limit: int) -> list[dict[str, Any]]:
     return processes[:limit]
 
 
-def target_process_names(monitor_edge: bool) -> list[str]:
-    names = ["chrome.exe", "chromium.exe"]
-    if monitor_edge:
-        names.append("msedge.exe")
-    return names
-
-
-def close_browsers_if_needed(process_names: list[str]) -> list[str]:
-    active_names: set[str] = set()
-    for proc in psutil.process_iter(["name"]):
-        name = (proc.info.get("name") or "").lower()
-        if name in process_names:
-            active_names.add(name)
-
-    closed: list[str] = []
-    for process_name in sorted(active_names):
-        try:
-            result = subprocess.run(
-                ["taskkill", "/F", "/IM", process_name],
-                check=False,
-                capture_output=True,
-                text=True,
-            )
-            if result.returncode == 0:
-                closed.append(process_name)
-        except OSError:
-            continue
-    return closed
-
-
 def main() -> int:
     try:
         config = load_config()
@@ -358,8 +325,6 @@ def main() -> int:
     last_public_ip_seen_at: float | None = None
     critical_count = 0
 
-    watched_process_names = [name.lower() for name in target_process_names(config.monitor_edge)]
-
     while True:
         now = time.monotonic()
 
@@ -382,9 +347,6 @@ def main() -> int:
             browser_closed = False
             critical_count_for_log = critical_count
             if threshold_reached and critical_count >= config.critical_count_before_action:
-                if os.name == "nt":
-                    closed_processes = close_browsers_if_needed(watched_process_names)
-                    browser_closed = bool(closed_processes)
                 critical_count_for_log = critical_count
                 critical_count = 0
 
@@ -402,8 +364,6 @@ def main() -> int:
                 top_processes=top_processes,
             )
             next_resource_check_at = now + config.resource_check_interval_seconds
-            if browser_closed:
-                sync.sync_log()
 
         if now >= next_ip_check_at:
             public_ip = get_public_ip(config)

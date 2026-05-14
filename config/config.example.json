@@ -9,7 +9,6 @@
   "ram_critical_percent": 90,
   "critical_count_before_action": 3,
   "resource_top_process_count": 5,
-  "monitor_edge": false,
   "server": {
     "host": "replace_with_server_host_or_ip",
     "port": 22,

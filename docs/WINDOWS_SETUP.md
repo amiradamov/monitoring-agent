@@ -21,7 +21,6 @@ Important fields:
 - `resource_check_interval_seconds`
 - `critical_count_before_action`
 - `resource_top_process_count`
-- `monitor_edge`
 - `local_log_max_bytes`
 - `local_log_backup_count`
 
@@ -86,7 +85,7 @@ Each line is JSON with timestamped events such as:
 - public IP checks
 - resource checks
 - server sync success/failure
-- browser close actions
+- resource threshold details
 
 ## 6. Change thresholds later
 
@@ -97,7 +96,6 @@ Edit `config\config.json` and change any of these values:
 - `resource_check_interval_seconds`
 - `critical_count_before_action`
 - `resource_top_process_count`
-- `monitor_edge`
 - `local_log_max_bytes`
 - `local_log_backup_count`
 

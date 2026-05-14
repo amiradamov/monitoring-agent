@@ -8,7 +8,6 @@ The agent handles:
 - Public IP change age tracking for dashboards and alerts
 - CPU and RAM checks every 1 minute by default
 - Top process snapshots when CPU or RAM crosses configured thresholds
-- Critical resource protection by closing configured Chromium-based browsers only after repeated threshold breaches
 - Local log writing per computer
 - Server log upload over SFTP/SSH with retry logic
 - Startup persistence through Windows Task Scheduler

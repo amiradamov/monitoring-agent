@@ -29,7 +29,7 @@ Common causes:
 - Firewall or VPN connectivity issue
 - `server.remote_root` points to a directory the user cannot write to
 
-## Chrome or Chromium closes too aggressively
+## Resource threshold logs are too noisy
 
 Adjust these settings in `config\config.json`:
 
@@ -46,24 +46,16 @@ Example:
 - `critical_count_before_action = 5`
 - `resource_top_process_count = 5`
 
-This makes the shutdown action less sensitive because it requires more repeated high-usage checks.
+This makes threshold logging less sensitive because it requires more repeated high-usage checks before the critical counter resets.
 
-## How browser auto-close works
+## How resource monitoring works
 
 The agent checks resource usage on the configured interval.
 
-It only tries to close browsers when:
+It records critical resource pressure when:
 
 1. CPU or RAM is at or above the critical threshold
 2. That critical condition happens for the configured number of checks in a row
-
-Target processes:
-
-- Always:
-  - `chrome.exe`
-  - `chromium.exe`
-- Optional:
-  - `msedge.exe` when `monitor_edge` is `true`
 
 Every resource check logs:
 
@@ -71,8 +63,6 @@ Every resource check logs:
 - CPU usage
 - RAM usage
 - whether threshold was reached
-- whether browsers were closed
-- which process names were closed
 - top memory-heavy processes when CPU or RAM is over a configured threshold
 
 Public IP checks also log:
